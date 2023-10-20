@@ -12,4 +12,4 @@ See instructions. Delete this line and place a link to the user stories here.
 
 ## Task boards
 
-See instructions. Delete this line and place a link to the task boards here.
+https://collisionnyc.atlassian.net/jira/software/projects/SWA/boards/2
