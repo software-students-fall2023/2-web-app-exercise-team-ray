@@ -4,7 +4,7 @@ A little exercise to build a web application following an agile development proc
 
 ## Product vision statement
 
-We want to develp a mobile application that connect students with experienced college counselors, providing a platform for high school students to find the ideal college consultant that fits their needs.
+We want to develp a mobile application as the "Yelp of education consulting" that connect students with experienced college counselors, providing a platform for high school students to find the ideal college consultant that fits their needs.
 
 ## User stories
 
