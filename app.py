@@ -35,6 +35,53 @@ def home():
     """
     return render_template('index.html')
 
+@app.route('/student')
+def student_portal():
+    return render_template('student.html')
+
+@app.route('/institution')
+def institution_portal():
+    return render_template('institution.html')
+
+@app.route('/write_review', methods=['GET', 'POST'])
+def write_review():
+    if request.method == 'POST':
+        review_content = request.form.get('review')
+        institution_id = request.form.get('institution_id')  # You must identify the institution somehow
+        review = {
+            "content": review_content,
+            "institution_id": institution_id,
+            "created_at": datetime.datetime.utcnow()
+        }
+        db.reviews.insert_one(review)
+        return redirect(url_for('student_portal'))
+    return render_template('write_review.html')
+    
+@app.route('/search_institutions', methods=['GET', 'POST'])
+def search_institutions():
+    if request.method == 'POST':
+        institution_name = request.form.get('institution_name')
+        institutions = db.institutions.find({"name": {"$regex": institution_name, "$options": 'i'}})
+        return render_template('institution_results.html', institutions=institutions)
+    return render_template('search_institutions.html')
+
+@app.route('/list_institutions')
+def list_institutions():
+    institutions = db.institutions.find()
+    return render_template('list_institutions.html', institutions=institutions)
+
+@app.route('/add_institution', methods=['GET', 'POST'])
+def add_institution():
+    if request.method == 'POST':
+        institution_data = {
+            "name": request.form.get('name'),
+            "description": request.form.get('description'),
+            "created_at": datetime.datetime.utcnow()
+        }
+        db.institutions.insert_one(institution_data)
+        return redirect(url_for('institution_portal'))
+    return render_template('add_institution.html')
+
 @app.route('/read')
 def read():
     """
@@ -71,7 +118,7 @@ def create_post():
     db.exampleapp.insert_one(doc) # insert a new document
     return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
-    @app.route('/edit/<mongoid>')
+@app.route('/edit/<mongoid>')
 def edit(mongoid):
     """
     Route for GET requests to the edit page.
@@ -102,7 +149,7 @@ def edit_post(mongoid):
         { 
             "$set": doc }
     )
- return redirect(url_for('read')) # tell the browser to make a request for the /read route
+    return redirect(url_for('read')) # tell the browser to make a request for the /read route
 
 
 @app.route('/delete/<mongoid>')

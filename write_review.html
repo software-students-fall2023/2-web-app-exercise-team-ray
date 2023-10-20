@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Write Review</title>
+</head>
+<body>
+    <h1>Write a Review</h1>
+    <form method="POST" action="/write_review">
+        <label for="review">Your Review:</label><br>
+        <textarea name="review" required></textarea>
+        <!-- You should also have a hidden input for institution ID or some way to identify the institution -->
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
