@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+    <h1>College Consulting Institution Information Form</h1>
+    <p>Please provide the following details about your institution:</p>
+
+    <form action="{{ url_for('create_institution') }}" method="post">
+        <label for="institutionName">Institution Name:</label>
+        <input type="text" id="institutionName" name="institutionName" required>
+        <br><br>
+
+        <label for="foundedYear">Year Founded:</label>
+        <input type="number" id="foundedYear" name="foundedYear" required>
+        <br><br>
+
+        <label for="baseLocation">Base Location:</label>
+        <input type="text" id="baseLocation" name="baseLocation" required>
+        <br><br>
+
+        <label for="description">Institution Description:</label>
+        <textarea id="description" name="description" rows="1" style="width: 400px; height: 50px;" required></textarea>
+        <br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+
+{% endblock %}
