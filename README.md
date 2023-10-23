@@ -18,10 +18,10 @@ As the “Yelp of education consulting,” CollegePro is a mobile application th
 ## Task boards
 
 sprint #1
-https://collisionnyc.atlassian.net/jira/software/projects/SWAS1/boards/3
+https://github.com/orgs/software-students-fall2023/projects/67/views/2
 
 sprint #2
-https://collisionnyc.atlassian.net/jira/software/projects/SWAS2/boards/2
+https://github.com/orgs/software-students-fall2023/projects/66/views/2
 
 ## Intruction to set up the application
 ## Setup for editing
