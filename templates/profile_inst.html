@@ -1,0 +1,22 @@
+{% extends 'base.html' %} 
+
+{% block container %}
+
+    <h2>Institution Name:</h2>
+    <a>{{info.name}}</a>
+    <br>
+    <h2>Brief Description: </h2> 
+    <p>{{info.desc}}</p>
+    <br>
+    <div class="reviews">
+        <h2>Reviews:</h2>
+        {% for review in reviews %}
+            <div class="review">
+                <p>Rating: {{review.rating}}</p>
+                <p>- {{review.content}}</p>
+                <p>Created at {{review.created_at.strftime("%H:%M on %d %B %Y")}}</p>
+            </div>
+        {%endfor%}
+    </div>
+
+{% endblock %}

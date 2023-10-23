@@ -66,9 +66,8 @@ def create_institution():
         "year": year_inst, 
         "base": base_inst,
         "desc": desc_inst,
-        "reviews": {},
     }
-    db.messages.insert_one(doc) # insert a new document
+    db.institutions.insert_one(doc) # insert a new document
 
     return redirect(url_for('home_inst'))
 
@@ -77,25 +76,62 @@ def create_institution():
 def write_review():
     if request.method == 'POST':
         review_content = request.form.get('review')
-        institution_id = request.form.get('institution_id')  # You must identify the institution somehow
-        review = {
-            "content": review_content,
-            "institution_id": institution_id,
-            "created_at": datetime.datetime.utcnow()
-        }
-        db.reviews.insert_one(review)
-        return redirect(url_for('student_portal'))
-    return render_template('write_review.html')
-    
+        rating = request.form.get('rating')
+        institution_name = request.form.get('institutionName')  # You must identify the institution somehow
+        
+        doc = db.institutions.find_one({"name" : institution_name})
+        if doc is not None:
+            review = {
+                "institutionName": institution_name,
+                "rating": rating,
+                "content": review_content,
+                "created_at": datetime.datetime.utcnow()
+            }
+            db.reviews.insert_one(review)
+            return redirect(url_for('student_portal'))
+        else:
+            return render_template('no_inst_error.html')
+
+
+@app.route('/student/institution_profile/<inst_id>')
+def view_profile_student(inst_id):
+    info = db.institutions.find_one({"_id": ObjectId(inst_id)})
+    reviews = db.reviews.find({"institutionName" : info["name"]}).sort("created_at", -1)
+    return render_template("profile_student.html", info=info, reviews=reviews)
+
+
+@app.route('/institution/institution_profile/<inst_id>')
+def view_profile_inst(inst_id):
+    info = db.institutions.find_one({"_id": ObjectId(inst_id)})
+    reviews = db.reviews.find({"institutionName" : info["name"]}).sort("created_at", -1)
+    return render_template("profile_inst.html", info=info, reviews=reviews)
+
 
 @app.route('/institution/list')
 def list():
     """
     Route for the institution list page
     """
-    docs = db.messages.find({}).sort("name", -1) # sort in descending order of created_at timestamp
+    docs = db.institutions.find({}).sort("name", -1) # sort in descending order of created_at timestamp
     return render_template('list.html', docs=docs) # render the hone template
 
+
+@app.route('/student/list')
+def list_student():
+    """
+    Route for the institution list page
+    """
+    docs = db.institutions.find({}).sort("name", -1) # sort in descending order of created_at timestamp
+    return render_template('list_student.html', docs=docs) # render the hone template
+
+@app.route('/student/delete_review_<inst_id>/<review_id>')
+def delete_review(inst_id, review_id):
+    """
+    Route for the institution list page
+    """
+    db.reviews.delete_one({"_id": ObjectId(review_id)})
+
+    return redirect(url_for("view_profile_student", inst_id=inst_id))
 
 @app.route('/institution/search_result', methods=['POST'])
 def search():
@@ -106,8 +142,20 @@ def search():
     base_inst = request.form['base_inst']
     kwrd_inst = request.form['kwrd_inst']
 
-    docs = db.messages.find({"name" :{"$regex" : name_inst, '$options' : 'i'}, "base":{"$regex" : base_inst, '$options' : 'i'}, "desc":{"$regex" : kwrd_inst, '$options' : 'i'} }).sort("name", -1)
+    docs = db.institutions.find({"name" :{"$regex" : name_inst, '$options' : 'i'}, "base":{"$regex" : base_inst, '$options' : 'i'}, "desc":{"$regex" : kwrd_inst, '$options' : 'i'} }).sort("name", -1)
     return render_template('list.html', docs=docs) # render the hone template
+
+@app.route('/student/search_result', methods=['POST'])
+def search_student():
+    """
+    Route for the institution list page
+    """
+    name_inst = request.form['name_inst']
+    base_inst = request.form['base_inst']
+    kwrd_inst = request.form['kwrd_inst']
+
+    docs = db.institutions.find({"name" :{"$regex" : name_inst, '$options' : 'i'}, "base":{"$regex" : base_inst, '$options' : 'i'}, "desc":{"$regex" : kwrd_inst, '$options' : 'i'} }).sort("name", -1)
+    return render_template('list_student.html', docs=docs) # render the hone template
 
 
 # @app.route('/list_institutions')
@@ -116,17 +164,18 @@ def search():
 #     return render_template('list_institutions.html', institutions=institutions)
 
 
-@app.route('/add_institution', methods=['GET', 'POST'])
-def add_institution():
-    if request.method == 'POST':
-        institution_data = {
-            "name": request.form.get('name'),
-            "description": request.form.get('description'),
-            "created_at": datetime.datetime.utcnow()
-        }
-        db.institutions.insert_one(institution_data)
-        return redirect(url_for('institution_portal'))
-    return render_template('add_institution.html')
+# @app.route('/add_institution', methods=['GET', 'POST'])
+# def add_institution():
+#     if request.method == 'POST':
+#         institution_data = {
+#             "name": request.form.get('name'),
+#             "description": request.form.get('description'),
+#             "created_at": datetime.datetime.utcnow()
+#         }
+#         db.institutions.insert_one(institution_data)
+#         return redirect(url_for('institution_portal'))
+#     return render_template('add_institution.html')
+
 
 @app.route('/edit/<inst_id>', methods=['POST'])
 def edit_inst(inst_id):
@@ -140,7 +189,7 @@ def edit_inst(inst_id):
     new_base = request.form['baseLocation']
     new_desc = request.form['description']
 
-    db.messages.update_one(
+    db.institutions.update_one(
         {"_id": ObjectId(inst_id)}, # match criteria
         { "$set": {'name' : new_name, 'year' : new_year, 'base' : new_base, 'desc' : new_desc} }
     )
@@ -153,8 +202,9 @@ def delete_inst(inst_id):
     Route for GET requests to the delete page.
     Deletes the specified record from the database, and then redirects the browser to the home page.
     """
-    db.messages.delete_one({"_id": ObjectId(inst_id)})
+    db.institutions.delete_one({"_id": ObjectId(inst_id)})
     return redirect(url_for('list'))
+
 
 @app.route('/read')
 def read():
@@ -165,6 +215,7 @@ def read():
     docs = db.exampleapp.find({}).sort("created_at", -1) # sort in descending order of created_at timestamp
     return render_template('read.html', docs=docs) # render the read template
 
+
 @app.route('/create')
 def create():
     """
@@ -174,31 +225,13 @@ def create():
     return render_template('create.html') # render the create template
 
 
-@app.route('/create', methods=['POST'])
-def create_post():
-    """
-    Route for POST requests to the create page.
-    Accepts the form submission data for a new document and saves the document to the database.
-    """
-    name = request.form['fname']
-    message = request.form['fmessage']
-
-    # create a new document with the data the user entered
-    doc = {
-        "name": name,
-        "message": message, 
-        "created_at": datetime.datetime.utcnow()
-    }
-    db.exampleapp.insert_one(doc) # insert a new document
-    return redirect(url_for('read')) # tell the browser to make a request for the /read route
-
 @app.route('/edit/<inst_id>')
 def edit(inst_id):
     """
     Route for GET requests to the list of institution page.
     Displays a list of existing consulting
     """
-    doc = db.messages.find_one({"_id": ObjectId(inst_id)})
+    doc = db.institutions.find_one({"_id": ObjectId(inst_id)})
     return render_template('edit_inst.html', doc=doc) # render the edit template
 
 
