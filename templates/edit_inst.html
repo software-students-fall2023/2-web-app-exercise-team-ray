@@ -1,0 +1,45 @@
+{% extends 'base.html' %} 
+
+{% block container %}
+<h2>Institution Information Update</h2>
+<style type="text/css">
+        .btn {
+         background-color:#D6EEEE;
+         cursor:pointer;
+         display: block;
+         border-radius: 8px;
+         padding: 10px 28px;
+         font-size: 12px;
+         text-align: center;
+     }
+     .btn2 {
+         background-color:rgb(255, 255, 255);
+         cursor:pointer;
+         display: block;
+         border-radius: 8px;
+         padding: 8px 18px;
+         font-size: 12px;
+     }
+     </style>
+
+<form method="POST" action="{{ url_for('edit_inst', inst_id=doc._id) }}">
+    <label for="institutionName"></label>
+    <input type="text"  class="btn2"  placeholder="Enter the institution name" id="institutionName" name="institutionName" value="{{doc.name}}" required>
+    <br><br>
+
+    <label for="foundedYear"></label>
+    <input type="number"  class="btn2" id="foundedYear"  placeholder="Enter the founded year" name="foundedYear" value="{{doc.year}}" required>
+    <br><br>
+
+    <label for="baseLocation"></label>
+    <input type="text"  class="btn2" id="baseLocation"  placeholder="Enter the base location" name="baseLocation" value="{{doc.base}}" required>
+    <br><br>
+
+    <label for="description"></label>
+    <textarea id="description"  class="btn2" name="description" placeholder="Write a short description" rows="1" style="width: 400px; height: 50px;" required>{{doc.desc}}</textarea>
+    <br><br>
+
+    <input type="submit"  class="btn" value="Save" />
+</form>
+
+{% endblock %}

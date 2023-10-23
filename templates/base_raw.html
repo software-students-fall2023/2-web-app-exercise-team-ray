@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Consulting Institution Review and Management System</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+    
+  </head>
+  
+  <body>
+    <div class="container">
+      <header>
+        <h1>Consulting Institution Review and Management System</h1>
+      </header>
+    
+      <main>{% block container %} {% endblock %}</main>
+      
+      <footer>
+        <p>
+          Source code available at
+          <a
+            href="https://github.com/software-students-fall2023/2-web-app-exercise-team-ray"
+            >Github.
+          </a>
+        </p>
+      </footer>
+
+    </div>
+  </body>
+
+
+</html>

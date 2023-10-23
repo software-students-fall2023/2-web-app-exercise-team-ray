@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Consulting Institution Review and Management System</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+
+    />
+    <style type="text/css">
+        .bt {
+         background-color:#D6EEEE;
+         cursor:pointer;
+         display: block;
+         border-radius: 8px;
+         padding: 8px 18px;
+         font-size: 12px;
+         text-align: center;
+     }
+     </style>
+     
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Consulting Institution Review and Management System</h1>
+        <nav>
+          <a href="{{ url_for('student_portal')}}">
+            <button class="bt">Student Portal </button>
+          </a>
+          <br/>
+          <a href="{{ url_for('list_student')}}">
+            <button class="bt">View Institutions</button>
+          </a>
+          <br/>
+          <a href="{{url_for('home')}}">
+            <button class="bt">Log Out </button>
+          </a>
+        </nav>
+      </header>
+      <main>{% block container %} {% endblock %}</main>
+      <footer>
+        <p>
+          Source code available at
+          <a
+            href="https://github.com/software-students-fall2023/2-web-app-exercise-team-ray"
+            >Github.</a>
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>

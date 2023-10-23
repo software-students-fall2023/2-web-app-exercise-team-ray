@@ -1,0 +1,59 @@
+{% extends 'base.html' %} 
+{% block container %}
+<style type="text/css">
+    .btn3 {
+     background-color:#D6EEEE;
+     text-align: center;
+     border-radius: 8px;
+     padding: 6px 18px;
+ }
+ 
+
+ </style>
+
+<h1>List of Consulting Institutions</h1>
+    <!-- Search Form -->
+    <form id="searchForm" action="{{ url_for('search') }}" method="post">
+        <label for="searchQuery"></label>
+        <input type="text"  id="name_inst" name="name_inst" placeholder="Enter Institution Name">
+        <input type="text"  id="base_inst" name="base_inst" placeholder="Enter Institution Base Location" style="width: 180px;">
+        <input type="text" id="kwrd_inst" name="kwrd_inst" placeholder="Enter Description Keyword" style="width: 160px;">
+        <input type="submit" class="btn3" value="Search">
+    </form>
+
+<br>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        text-align: left;
+        padding: 8px;
+    }
+    tr:nth-child(even) {
+        background-color: #D6EEEE;
+    }
+
+</style>
+
+<table style="width:100%">
+    <tr>
+        <th>Name</th>
+        <th>Base Location</th>
+        <th>Description</th>
+        <th>Actions</th>
+    </tr>
+    
+    {% for doc in docs %}
+    <tr>
+        <td>{{doc.name}}</td>
+        <td>{{doc.base}}</td>
+        <td>{{doc.desc}}</td>
+        <td><a href="{{ url_for('view_profile_inst', inst_id=doc._id)}}">Visit</a> | <a href="{{ url_for('edit', inst_id=doc._id)}}">Edit</a> | <a href="{{ url_for('delete_inst', inst_id=doc._id)}}">Delete</a></td>
+    </tr>
+    {%endfor%}
+
+</table>
+
+{% endblock %}

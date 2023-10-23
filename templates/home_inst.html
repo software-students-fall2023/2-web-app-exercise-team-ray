@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block container %}
+
+    <h1>College Consulting Institution Information Form</h1>
+    <p>Please provide the following details about your institution:</p>
+    <style type="text/css">
+        .btn {
+         background-color:#D6EEEE;
+         cursor:pointer;
+         display: block;
+         border-radius: 8px;
+         padding: 10px 28px;
+         font-size: 12px;
+         text-align: center;
+     }
+     .btn2 {
+         background-color:rgb(255, 255, 255);
+         cursor:pointer;
+         display: block;
+         border-radius: 8px;
+         padding: 8px 18px;
+         font-size: 12px;
+     }
+     </style>
+
+    <form action="{{ url_for('create_institution') }}" method="post">
+        <label for="institutionName"></label>
+        <input type="text" class="btn2"  id="institutionName" placeholder="Enter the institution name"name="institutionName" required>
+        <br><br>
+
+        <label for="foundedYear"></label>
+        <input type="number" class="btn2" id="foundedYear"  placeholder="Enter the year founded" name="foundedYear" required>
+        <br><br>
+
+        <label for="baseLocation"></label>
+        <input type="text" class="btn2" id="baseLocation" placeholder="Enter the base location" name="baseLocation" required>
+        <br><br>
+
+        <label for="description"></label>
+        <textarea id="description"  class="btn2" name="description" placeholder="Write a short description for the institution "  rows="1" style="width: 400px; height: 50px;" required></textarea>
+        <br><br>
+
+        <input type="submit" class="btn" value="Submit">
+    </form>
+
+{% endblock %}

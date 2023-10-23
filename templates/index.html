@@ -1,0 +1,39 @@
+{% extends 'base_raw.html' %} 
+
+{% block container %}
+   
+
+
+    <body>
+        
+        <h1>Welcome to the Review and Management Platform!</h1>
+        <p>Our platform provides search and review services in field of collge consulting. If you are students, you will be able to search for consulting institutions that match your expecation and write reviews for institutions you have worked with. If you are the owner of the insitutions, we provide a great opportunity for you to introduce your service to students.</p>
+        <h2>Please select your role:</h2>
+        <div>
+            <style type="text/css">
+               .btn {
+                background-color:#D6EEEE;
+                cursor:pointer;
+                display: block;
+                width: 100%;
+                border: none;
+                border-radius: 8px;
+                padding: 14px 28px;
+                font-size: 16px;
+                cursor: pointer;
+                text-align: center;
+            }
+            </style>
+
+            <a href="/student">
+                <button class="btn">Student </button>
+            </a>
+            <br><br>
+            <a href="/institution">
+                <button class="btn">Institution</button>
+            </a>
+        </div>
+    </body>
+    </html>
+
+{% endblock %}
